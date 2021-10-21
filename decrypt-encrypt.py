@@ -1,4 +1,5 @@
 import string
+import re
 
 
 def create_matrix(key):
@@ -45,6 +46,7 @@ def get_position(matrix_list, i):
 
 def encrypt(key, message):
     rows, columns, matrix_list = create_matrix(key)
+    message = re.sub(r'\W+', '', message)
     message = ''.join(message.lower().split(' '))
     pairs = list()
     i = 0
@@ -98,11 +100,30 @@ def decrypt(key, message):
 
 if __name__ == '__main__':
     key = input("Insert the key: ")
-    message = input("Insert the message: ")
+    answer = 0
+    while answer != 3:
+        print("Insert the option you want to use: ")
+        print("1. Encrypt")
+        print("2. Decrypt")
+        print("3. Exit")
+        try:
+            answer = int(input())
+        except ValueError:
+            print("Insert a valid option")
+            continue
+        if answer == 3:
+            break
+        if answer == 1:
+            message = input("Insert the message: ")
+            encrypted = encrypt(key, message)
+        elif answer == 2:
+            message = input("Insert the message: ")
+            decrypt(key, message)
+        else:
+            print("Insert a valid option")
     # encrypted = encrypt("yoanpiz", "Our friend from Paris examined his empty glass with surprise as if evaporation "
     #                                "had taken place while he wasnt looking I poured some more wine and he settled "
     #                                "back in his chair face tilted up towards the sun")
     # decrypt("yoanpiz", encrypted)
     # Our friend from Paris examined his empty glass with surprise as if evaporation had taken place while he wasnt looking I poured some more wine and he settled back in his chair face tilted up towards the sun
-    encrypted = encrypt(key, message)
-    decrypt(key, encrypted)
+

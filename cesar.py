@@ -1,3 +1,4 @@
+import re
 
 
 def decrypt(k: int, message: str):
@@ -5,7 +6,6 @@ def decrypt(k: int, message: str):
     message = message.upper()
     for i in message:
         res += chr(((ord(i)-k-65) % 26)+65)
-        # res += chr(((ord(i)-3-65) % 26)+65)
     print(res)
 
 
@@ -14,7 +14,6 @@ def encrypt(k: int, message: str):
     message = message.upper()
     for i in message:
         res += chr(((ord(i)+k-65) % 26)+65)
-        # res += chr(ord(i)+3)
     print(res)
 
 
@@ -34,7 +33,7 @@ def main():
         if answer == 3:
             break
         if answer == 1:
-            message = input("Insert the message: ")
+            message = re.sub(r'\W+', '', input("Insert the message: "))
             encrypt(k, message)
         elif answer == 2:
             message = input("Insert the message: ")
@@ -48,4 +47,4 @@ if __name__ == '__main__':
 
 # con 13
 # VSGURAFNUNFGVZRGBERNQZLRZNVYVJVFUGURLFRAQZRNOYBBQL
-# IFTHENSAHASTIMETOREADMYEMAILIWISHTHEYSENDMEABLOODY
+# IF THE NSA HAS TIME TO READ MY EMAIL I WISH THEY SEND ME A BLOODY

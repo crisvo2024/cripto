@@ -1,3 +1,5 @@
+from math import floor
+
 
 def encrypt(key, message):
     result = ""
@@ -12,6 +14,14 @@ def encrypt(key, message):
         result += "".join([chr((x % 26) + 65) for x in res])
     print(result)
 
+
+def gcd(a, b):
+    if b == 0:
+        return a, 1, 0
+    q = floor(a/b)
+    d1, x1, y1 = gcd(b, a % b)
+    d, x, y = d1, y1, x1 - q*y1
+    return d, x, y
 
 def main():
     # text = input().upper()
@@ -38,4 +48,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    #main()
+    print(gcd(63,37))
+    print(gcd(53,26))

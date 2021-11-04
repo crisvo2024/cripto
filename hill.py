@@ -1,3 +1,4 @@
+import re
 from math import floor
 
 
@@ -15,6 +16,16 @@ def encrypt(key, message):
     print(result)
 
 
+def decrypt(gcd26, key, message):
+    d, x, y = gcd26
+    adj = [[key[1][1], -key[0][1]], [-key[1][0], key[0][0]]]
+    inverse = [[0, 0], [0, 0]]
+    for i, row in enumerate(adj):
+        for k, val in enumerate(row):
+            inverse[i][k] = (val * x) % 26
+    encrypt(inverse, message)
+
+
 def gcd(a, b):
     if b == 0:
         return a, 1, 0
@@ -23,31 +34,55 @@ def gcd(a, b):
     d, x, y = d1, y1, x1 - q*y1
     return d, x, y
 
+
 def main():
-    # text = input().upper()
-    # res = ""
-    # for i in range(0, len(text), 2):
-    #     pair = text[i:i+2]
-    #     res += chr((((ord(pair[0])-65)*7+(ord(pair[1])-65)*23) % 26) + 65)
-    #     res += chr((((ord(pair[0])-65)*18+(ord(pair[1])-65)*11) % 26) + 65)
-    # print(res)
     # key = [[11, 8], [3, 7]]
     # key = [[7, 18], [23, 11]]
-    key = [[6, 13, 20], [24, 16, 17], [1, 10, 15]]
     # message = "JULY"
     # message = "VKFZRVWTIAZSMISGKA"
-    message = "CAT"
-    encrypt(key, message)
-    # VKFZRVWTIAZSMISGKA
+    # encrypt(key, message)
+    # DELW
     # NUMBERTHEORYISEASY
-    # for i in range(0, len(text), 2):
-    #     pair = text[i:i+2]
-    #     res += chr((((ord(pair[0])-65)*11+(ord(pair[1])-65)*3) % 26) + 65)
-    #     res += chr((((ord(pair[0])-65)*8+(ord(pair[1])-65)*7) % 26) + 65)
-    # print(res)
+    valid_key = False
+    key = [[], []]
+    gcd26 = (0, 0, 0)
+    while not valid_key:
+        print("Insert the key:")
+        key[0] = list(map(int, input("Insert the numbers of the first row separated by a space: ").split()))
+        key[1] = list(map(int, input("Insert the numbers of the second row separated by a space: ").split()))
+        det_a = key[0][0]*key[1][1]-key[0][1]*key[1][0]
+        if det_a == 0:
+            print("Insert a valid key")
+            continue
+        gcd26 = gcd(det_a, 26)
+        if gcd26[0] != 1:
+            print("Insert a valid key")
+            continue
+        valid_key = True
+    answer = 0
+    while answer != 3:
+        print("Insert the option you want to use: ")
+        print("1. Encrypt")
+        print("2. Decrypt")
+        print("3. Exit")
+        try:
+            answer = int(input())
+        except ValueError:
+            print("Insert a valid option")
+            continue
+        if answer == 3:
+            break
+        if answer == 1:
+            message = re.sub(r'\W+', '', input("Insert the message: ")).upper()
+            encrypt(key, message)
+        elif answer == 2:
+            message = re.sub(r'\W+', '', input("Insert the message: ")).upper()
+            decrypt(gcd26, key, message)
+        else:
+            print("Insert a valid option")
 
 
 if __name__ == '__main__':
-    #main()
-    print(gcd(63,37))
-    print(gcd(53,26))
+    main()
+    # print(gcd(-18, 26))
+    # print(gcd(53,26))
